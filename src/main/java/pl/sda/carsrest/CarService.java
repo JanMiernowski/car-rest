@@ -1,6 +1,10 @@
 package pl.sda.carsrest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -18,9 +22,7 @@ public class CarService {
     private CarRepository carRepository;
 
     public List<CarDto> findAllCars(){
-        return carRepository.findAllWithFetch().stream()
-                .map(entity -> entity.toDto())
-                .collect(Collectors.toList());
+        return transformCarsToDto(carRepository.findAllWithFetch());
     }
 
     @PostConstruct
@@ -42,5 +44,17 @@ public class CarService {
         return carRepository.findById(id)
                 .map(entity -> entity.toDto())
                 .orElseThrow(() -> new RuntimeException("Nie znaleziono samochodu o id " + id));
+    }
+
+    public Page<CarDto> findAllCars(Integer size, Integer page, String model, String sortField) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(sortField));
+        Page<Car> byModel = carRepository.findByModel(model, pageRequest);
+        return new PageImpl<>(transformCarsToDto(byModel.getContent()), pageRequest, byModel.getTotalElements());
+    }
+
+    private List<CarDto> transformCarsToDto(List<Car> content) {
+        return content.stream()
+                .map(entity -> entity.toDto())
+                .collect(Collectors.toList());
     }
 }

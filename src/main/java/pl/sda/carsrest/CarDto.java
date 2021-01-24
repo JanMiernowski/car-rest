@@ -10,6 +10,9 @@ public class CarDto {
     private String vin;
     private List<AccessoryDto> accessories;
 
+    public CarDto() {
+    }
+
     public CarDto(Integer id, String model, String vin, List<AccessoryDto> accessories) {
         this.id = id;
         this.model = model;

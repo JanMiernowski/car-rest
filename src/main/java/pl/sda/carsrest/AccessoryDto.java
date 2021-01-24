@@ -5,6 +5,9 @@ public class AccessoryDto {
     private Integer id;
     private String accessoryName;
 
+    public AccessoryDto() {
+    }
+
     public AccessoryDto(Integer id, String accessoryName) {
         this.id = id;
         this.accessoryName = accessoryName;

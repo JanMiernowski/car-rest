@@ -1,17 +1,17 @@
 package pl.sda.carsrest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/cars")
+@CrossOrigin
 public class CarController {
 
     @Autowired
@@ -23,7 +23,24 @@ public class CarController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<CarDto> car(@PathVariable Integer id){
         return ResponseEntity.ok(carService.findCarById(id));
+    }
+
+    @GetMapping("/pagination")
+    public ResponseEntity<Page<CarDto>> carsListpagination(
+            @RequestParam("size") Integer size,
+            @RequestParam("page") Integer page,
+            @RequestParam("model") String model,
+            @RequestParam("sortField") String sortField
+    ){
+        return ResponseEntity.ok(carService.findAllCars(size, page, model, sortField));
+    }
+
+    @PostMapping
+    public ResponseEntity<CarDto> addCar(@RequestBody CarDto carDto){
+
+        return ResponseEntity.ok().build();
     }
 }

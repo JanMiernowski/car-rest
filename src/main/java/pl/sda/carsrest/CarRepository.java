@@ -1,5 +1,7 @@
 package pl.sda.carsrest;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -12,4 +14,7 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
 
     @Query("select a from Car c join c.accessories a where c.id=?1")
     List<Accessory> findAccessoryByCarId(Integer id);
+
+    @Query("select c from Car c where upper(c.model) like upper(concat('%', ?1, '%'))")
+    Page<Car> findByModel(String model, PageRequest pageRequest);
 }
