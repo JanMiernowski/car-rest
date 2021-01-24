@@ -57,4 +57,13 @@ public class CarService {
                 .map(entity -> entity.toDto())
                 .collect(Collectors.toList());
     }
+
+    public void addCar(CarDto carDto) {
+        List<Accessory> accessories = carDto.getAccessories().stream()
+                .map(dto -> Accessory.fromDto(dto))
+                .collect(Collectors.toList());
+        Car car = Car.fromDto(carDto, accessories);
+        accessoryRepository.saveAll(accessories);
+        carRepository.save(car);
+    }
 }

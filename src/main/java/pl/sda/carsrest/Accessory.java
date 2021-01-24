@@ -20,6 +20,10 @@ public class Accessory {
         this.accessoryName = accessoryName;
     }
 
+    public static Accessory fromDto(AccessoryDto dto) {
+        return new Accessory(dto.getAccessoryName());
+    }
+
     public Integer getId() {
         return id;
     }

@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/cars")
-@CrossOrigin
 public class CarController {
 
     @Autowired
@@ -40,7 +39,7 @@ public class CarController {
 
     @PostMapping
     public ResponseEntity<CarDto> addCar(@RequestBody CarDto carDto){
-
+        carService.addCar(carDto);
         return ResponseEntity.ok().build();
     }
 }

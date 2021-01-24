@@ -27,6 +27,14 @@ public class Car {
         this.accessories = accessories;
     }
 
+    public static Car fromDto(CarDto carDto, List<Accessory> accessories) {
+        return new Car(
+                carDto.getModel(),
+                carDto.getVin(),
+                accessories
+        );
+    }
+
     public CarDto toDto() {
         return new CarDto(
                 id,
